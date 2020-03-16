@@ -2,6 +2,7 @@ import abc
 import numpy as np
 
 from delfi.neuralnet.NeuralNet import NeuralNet
+from delfi.summarystats.StatMeanStd import mean_std
 from delfi.utils.meta import ABCMetaDoc
 from delfi.utils.data import isint
 
@@ -370,8 +371,7 @@ class BaseInference(metaclass=ABCMetaDoc):
         else:  # samples were provided as an input
             params, stats = pilot_samples
 
-        self.stats_mean = np.nanmean(stats, axis=0)
-        self.stats_std = np.nanstd(stats, axis=0)
+        self.stats_mean, self.stats_std  = mean_std(repetition_list=stats)
         assert not np.isnan(self.stats_mean).any(), "pilot run failed"
         assert not np.isnan(self.stats_std).any(), "pilot run failed"
         self.stats_std[self.stats_std == 0.0] = 1.0
