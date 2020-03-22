@@ -1,7 +1,6 @@
 import abc
 import numpy as np
 from scipy.stats import multivariate_normal
-import numpy as np
 import tqdm
 
 from delfi.utils.meta import ABCMetaDoc
@@ -54,7 +53,7 @@ class Score_MLE_Projected(metaclass=ABCMetaDoc):
             self.Finv = None
         else:
             self.F = F
-            self.Finv = np.linalg.inv(F + numpy.eye(F.shape[1])*10^-6)
+            self.Finv = np.linalg.inv(F + np.eye(F.shape[1])*10^-6)
 
         # Holder to store any simulations and parameter values that get ran
         self.simulations = np.array([]).reshape((0,self.ndata))
@@ -133,7 +132,7 @@ class Score_MLE_Projected(metaclass=ABCMetaDoc):
             self.mu += sims[i,:]/(nsims*sub_batch)
             mu2 += np.outer(sims[i,:], sims[i,:])/(nsims*sub_batch)
         self.C = mu2 - np.outer(self.mu,self.mu)
-        self.Cinv = np.linalg.inv(self.C + numpy.eye(self.C.shape[1])*10^-6)
+        self.Cinv = np.linalg.inv(self.C + np.eye(self.C.shape[1])*10^-6)
 
         # Save the simulations
         self.simulations = sims
@@ -215,7 +214,7 @@ class Score_MLE_Projected(metaclass=ABCMetaDoc):
             F = F + np.linalg.inv(self.prior_covariance)
 
         self.F = F
-        self.Finv = np.linalg.inv(F + numpy.eye(F.shape[1])*10^-6)
+        self.Finv = np.linalg.inv(F + np.eye(F.shape[1])*10^-6)
 
     # Nuisance projected score
     def calc(self, repetition_list):
@@ -233,7 +232,7 @@ class Score_MLE_Projected(metaclass=ABCMetaDoc):
 
         # Compute projection vectors
         P = np.zeros((n_interesting, n_nuisance))
-        Fnn_inv = np.linalg.inv(np.delete(np.delete(self.F + numpy.eye(F.shape[1])*10^-6, interesting, axis = 0), interesting, axis = 1))
+        Fnn_inv = np.linalg.inv(np.delete(np.delete(self.F + np.eye(F.shape[1])*10^-6, interesting, axis = 0), interesting, axis = 1))
         Finv_tt = np.delete(np.delete(self.Finv, self.nuisances, axis=0), self.nuisances, axis=1)
         for i in range(n_interesting):
             P[i,:] = np.dot(Fnn_inv, self.F[i,self.nuisances])
