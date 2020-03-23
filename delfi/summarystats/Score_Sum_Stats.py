@@ -232,7 +232,7 @@ class Score_MLE_Projected(metaclass=ABCMetaDoc):
 
         # Compute projection vectors
         P = np.zeros((n_interesting, n_nuisance))
-        Fnn_inv = np.linalg.inv(np.delete(np.delete(self.F + np.eye(F.shape[1])*10**-6, interesting, axis = 0), interesting, axis = 1))
+        Fnn_inv = np.linalg.inv(np.delete(np.delete(self.F + np.eye(self.F.shape[1])*10**-6, interesting, axis = 0), interesting, axis = 1))
         Finv_tt = np.delete(np.delete(self.Finv, self.nuisances, axis=0), self.nuisances, axis=1)
         for i in range(n_interesting):
             P[i,:] = np.dot(Fnn_inv, self.F[i,self.nuisances])
